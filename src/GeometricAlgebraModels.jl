@@ -13,9 +13,13 @@ export LorentzianAlgebra
 
 include("common.jl")
 include("conformal.jl")
+include("lorentzian.jl")
+include("liesphere.jl")
+include("opns.jl")
+
+function goo end
 
 export gaplot
 function gaplot end
-
 
 end # module GeometricAlgebraModels
