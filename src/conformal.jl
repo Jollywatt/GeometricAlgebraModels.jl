@@ -38,7 +38,7 @@ export translate
 export standardform
 export ipns, opns
 
-export DirectionBlade, FlatBlade, DualFlatBlade, RoundBlade
+export DirectionBlade, FlatBlade, DualFlatBlade, RoundBlade, TangentBlade
 export FlatGeometry, RoundGeometry, PointAtInfinity, EmptySet
 
 
@@ -182,6 +182,7 @@ end
 		FlatBlade{Sig,K}(E, p)
 		DualFlatBlade{Sig,K}(E, p)
 		RoundBlade{Sig,K}(E, p, r2)
+		TangentBlade{Sig,K}(E, p)
 
 Standard forms of blades in the conformal geometric algebra `CGA{Sig}` over base space `Sig`.
 
@@ -191,6 +192,7 @@ Standard forms of blades in the conformal geometric algebra `CGA{Sig}` over base
 | `FlatBlade(E, p)` | ``𝚃ₚ[n₀ ∧ E ∧ n_∞]`` |
 | `DualFlatBlade(E, p)` | ``𝚃ₚ[E]`` |
 | `RoundBlade(E, p, r2)` | ``𝚃ₚ[(n₀ + r2/2 n_∞) ∧ E]`` |
+| ↳ `TangentBlade(E, p)` | ``𝚃ₚ[n₀ ∧ E]`` |
 
 Any blade in `CGA{Sig}` is of exactly one of the forms above, where:
 - ``E`` is a `K`-blade in the base space
@@ -228,6 +230,21 @@ struct RoundBlade{Sig,K,G,R} <: CGABlade{Sig,K}
 	RoundBlade(E::Multivector{Sig,G}, p::Multivector{Sig,1}, r2::R) where {Sig,G,R} = new{Sig,G + 1,G,R}(E, p, r2)
 end
 
+"""
+	TangentBlade{Sig,K}
+
+A `TangentBlade` is a special case of `RoundBlade` which has zero square radius.
+
+| Value | Mathematical form |
+|:-----|:-----|
+| `RoundBlade(E, p, r2)` | ``𝚃ₚ[(n₀ + r2/2 n_∞) ∧ E]`` |
+| `TangentBlade(E)` | ``𝚃ₚ[n₀ ∧ E]`` |
+"""
+struct TangentBlade{Sig,K} <: CGABlade{Sig,K}
+	E::Multivector{Sig,K}
+	p::Multivector{Sig,1}
+end
+
 @doc (@doc CGABlade) (DirectionBlade, FlatBlade, DualFlatBlade, RoundBlade)
 
 Multivector(X::DirectionBlade{Sig}) where Sig = X.E ∧ infinity(Sig)
@@ -246,13 +263,13 @@ end
 
 Put the blade `X` in standard form, returning a `CGABlade` object.
 """
-function standardform(X::AbstractMultivector{CGA{Sig}}) where Sig
+function standardform(X::AbstractMultivector{CGA{Sig}}; atol=sqrt(eps(float(eltype(X))))) where Sig
 	@assert isblade(X)
 
 	o = origin(signature(X))
 	oo = infinity(signature(X))
 
-	iszeroish(X) = isapprox(X, 0, atol=sqrt(eps(float(eltype(X)))))
+	iszeroish(X) = isapprox(X, 0; atol)
 
 	Xwoo = X ∧ oo
 	Xioo = X ⨽ oo
@@ -276,7 +293,11 @@ function standardform(X::AbstractMultivector{CGA{Sig}}) where Sig
 			E = unembed(involution(-Xioo))
 			P = sandwich_prod(X, oo)
 			r2 = (X⊙involution(X))/(E⊙E)
-			RoundBlade(E, dn(P), r2)
+			if abs(r2) <= atol
+				TangentBlade(E, dn(P))
+			else
+				RoundBlade(E, dn(P), r2)
+			end
 		end
 	end
 end
@@ -385,6 +406,7 @@ showformula(::Type{<:DirectionBlade}) = styled"{bold:E}∧oo"
 showformula(::Type{<:FlatBlade}) = styled"translate({bold:p}, n0∧{bold:E}∧noo)"
 showformula(::Type{<:DualFlatBlade}) = styled"translate({bold:p}, {bold:E})"
 showformula(::Type{<:RoundBlade}) = styled"translate({bold:p}, (n0 + {bold:r2}/2*noo)∧{bold:E})"
+showformula(::Type{<:TangentBlade}) = styled"translate({bold:p}, n0∧{bold:E})"
 
 
 showformula(::Type{<:PointAtInfinity}) = nothing
