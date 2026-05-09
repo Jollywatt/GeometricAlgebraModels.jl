@@ -154,7 +154,7 @@ up, dn
 Translation versor for conformal geometric algebra.
 
 # Examples
-```jldoctest
+```jldoctest; setup = :(using .Conformal)
 julia> p, x = randn(Multivector{3,1}, 2);
 
 julia> translate(p, up(x)) ≈ up(x + p)
