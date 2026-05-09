@@ -21,6 +21,12 @@ makedocs(
     modules = [GeometricAlgebraModels],
     repo = Remotes.GitHub("jollywatt", "GeometricAlgebraModels.jl"),
     plugins = [links],
+    pages = Any[
+    	"index.md",
+    	"Models" => ["cga.md"],
+    	"blender.md",
+    	"docstrings.md",
+		],
 )
 
 # Documenter can also automatically deploy documentation to gh-pages.
