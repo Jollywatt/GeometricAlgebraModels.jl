@@ -8,13 +8,14 @@ samealgebra(X::AbstractMultivector...) = promote(X...)
 	translate(p)
 	translate(p, X) -> X′ = sandwich_prod(translate(p), X)
 
-Translation versor for the displacement vector `p::Grade{1}`.
+Translation versor for the displacement vector `p::Grade{1}` for the algebra that `X` and `p` belong to.
 
 The single-argument method returns the translation versor itself and
-the two-argument form applies the versor to `X` with [`sandwich_prod`](@ref).
+the two-argument form applies the versor to `X` with [`GeometricAlgebra.sandwich_prod`](@ref).
 
-Different methods of `translate(p::Grade{1,Sig})` may exist for different algebras `Sig`.
-The two-argument method embeds the vector `p` into the same space as `X`.
+Different methods of `translate(p::Grade{1,Sig})` may exist for different algebras `Sig`
+(for instance, it returns the conformal translation rotor if `p` is a CGA vector).
+The two-argument method promotes `p` and `X` into the same algebra before calling `translate(p)`.
 """
 function translate(p, X::AbstractMultivector{Sig}) where Sig
 	p, X = samealgebra(p, X) # convert to same algebra

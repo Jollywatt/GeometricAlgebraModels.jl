@@ -149,22 +149,18 @@ up, dn
 #= translation operator =#
 
 """
-Translate `X::Multivector{CGA{Sig}}` by the displacement vector `p`.
+	translate(p::Grade{1,CGA{Sig}})
 
-The single-argument method returns the translation rotor and
-the two-argument form applies the rotor to `X` with [`sandwich_prod`](@ref).
-
-The translation rotor is defined as ``𝚃ₚ = \\exp(½ n_∞ p)`` where ``n_∞`` is
-the point at [`infinity`](@ref).
+Translation versor for conformal geometric algebra.
 
 # Examples
-```jldoctest; setup = :(using GeometricAlgebra.Conformal)
-julia> (p, x), noo = randn(Multivector{3,1}, 2), infinity(3);
+```jldoctest
+julia> p, x = randn(Multivector{3,1}, 2);
 
 julia> translate(p, up(x)) ≈ up(x + p)
 true
 
-julia> translate(p, noo) ≈ noo
+julia> translate(p, infinity()) ≈ infinity()
 true
 ```
 """
