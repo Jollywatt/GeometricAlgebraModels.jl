@@ -11,7 +11,7 @@ samealgebra(X::AbstractMultivector...) = promote(X...)
 Translation versor for the displacement vector `p::Grade{1}` for the algebra that `X` and `p` belong to.
 
 The single-argument method returns the translation versor itself and
-the two-argument form applies the versor to `X` with [`GeometricAlgebra.sandwich_prod`](@ref).
+the two-argument form applies the versor to `X` with [`GeometricAlgebra.sandwich_prod`](@extref).
 
 Different methods of `translate(p::Grade{1,Sig})` may exist for different algebras `Sig`
 (for instance, it returns the conformal translation rotor if `p` is a CGA vector).

@@ -1,4 +1,5 @@
 using Documenter
+using DocumenterInterLinks
 using GeometricAlgebraModels
 
 pushfirst!(LOAD_PATH, joinpath(@__DIR__, ".."))
@@ -9,12 +10,17 @@ DocMeta.setdocmeta!(GeometricAlgebraModels, :DocTestSetup, quote
     using GeometricAlgebraModels.GeometricAlgebra
 end; recursive=true)
 
+links = InterLinks(
+	"GeometricAlgebra" => "https://jollywatt.github.io/GeometricAlgebra.jl/dev/",
+)
+
 
 makedocs(
-    sitename = "GeometricAlgebraModels",
+    sitename = "GeometricAlgebraModels.jl",
     format = Documenter.HTML(),
     modules = [GeometricAlgebraModels],
-    repo = Remotes.GitHub("jollywatt", "GeometricAlgebraModels.jl")
+    repo = Remotes.GitHub("jollywatt", "GeometricAlgebraModels.jl"),
+    plugins = [links],
 )
 
 # Documenter can also automatically deploy documentation to gh-pages.
