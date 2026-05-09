@@ -1,0 +1,121 @@
+```@meta
+CurrentModule = GeometricAlgebraModels.Conformal
+DocTestSetup = quote
+	using GeometricAlgebraModels
+	using .Conformal
+end
+```
+
+```@setup cga
+using GeometricAlgebra
+```
+
+# Conformal Geometric Algebra
+
+Conformal geometric algebra (CGA) is an projective model of _flats_ (points, lines, planes, ...) and _rounds_ (point pairs, circle, spheres, ...) in $\mathbb{R}^n$ which represents objects as blades in a geometric algebra over $\mathbb{R}^{n + 2}$.
+
+The `GeometricAlgebraModels.Conformal` submodule defines CGA and a few important operations, including [`standardform`](@ref) for classifying blades and the functions [`ipns`](@ref) and [`opns`](@ref) for obtaining the geometric forms represented by a blade.
+
+You can obtain the standard basis blades for $n$-D CGA using the `CGA{n}` metric signature.
+```@repl cga
+using GeometricAlgebra
+using GeometricAlgebraModels.Conformal
+basis(CGA{3})
+```
+Notice that CGA includes two extra basis vectors: ``𝐯_p`` and ``𝐯_m`` squaring to $+1$ and $-1$, respectively.
+More generally, any metric signature `Sig` (defining the _base space_) has a conformalisation `CGA{Sig}` with two extra dimensions.
+
+## The representation of points in $\mathbb{R}^n$
+
+In CGA, points $p \in \mathbb{R}^n$ are represented by null vectors (squaring to zero) in $\mathbb{R}^{n + 2}$ given by the map
+```math
+\begin{align*}
+\operatorname{up} &: \mathbb{R}^n \to \mathbb{R}^{n + 2} \\
+\operatorname{up}(p) &= n_0 + p + \frac12 p^2 n_\infty
+\end{align*}
+```
+where $n_0$ and $n_\infty$ are null basis vector satisfying $n_0^2 = n_\infty^2 = 0$ and $n_0 \cdot n_\infty = -1$.
+In terms of standard basis vectors, they are defined as ``n_0 = \frac12(𝐯_m - 𝐯_p)`` and ``n_\infty = 𝐯_m + 𝐯_p`` and can be obtained with [`nullbasis`](@ref), [`GeometricAlgebraModels.Conformal.origin`](@ref) and [`GeometricAlgebraModels.Conformal.infinity`](@ref).
+```@repl cga
+n0, noo = nullbasis(3)
+```
+
+Use the [`up`](@ref) function to lift $1$-vectors from a base space with signature `Sig` into `CGA{Sig}`:
+```@repl cga
+@basis 3
+p = v1 + 2v2 + 3v3;
+up(p)
+ans == n0 + p + 2\p^2*noo == up(1, 2, 3)
+```
+The overall scale of vectors (and blades) in CGA does not matter; it is a _homogeneous_ model.
+We can go the other way with the _down_ map, [`dn`](@ref).
+```@repl cga
+p == dn(up(p)) == dn(100up(p))
+```
+You may notice that $n_0$ itself is equal to $\operatorname{up}(0)$ and $n_\infty$ is the limit of $\operatorname{up}(x)/\|x\|^2$ as $x$ goes to infinity in any direction.
+We interpret $n_0$ as representing the origin point and $n_∞$ as representing the unique _point at infinity_.[^1]
+
+[^1]:
+	We are motivated by the fact that a unique point at infinity arises to consider an _extended base space_ $\mathbb{R}^n \cup \{\infty\}$ rather than simply $\mathbb{R}^n$.
+	Then we may define $\operatorname{up} : \mathbb{R}^n \cup \{\infty\} \to \mathbb{R}^{n + 2}$
+	with the additional rule $\operatorname{up}(\infty) = n_\infty$.
+
+## Standard form of CGA blades
+
+It is useful to represent blades in `CGA{Sig}` in purely terms of $n_0$, $n_∞$ and objects in the base space `Sig`.
+
+In fact, any blade $X$ in `CGA{Sig}` is of exactly one of the four forms represented by the subtypes of [`CGABlade`](@ref).
+
+| `CGABlade` Subtype | Mathematical form | $X \wedge n_\infty$ | $X \lfloor n_\infty$ |
+|:-------------------|:-----------------:|:-------------------:|:--------------------:|
+| [`DirectionBlade`](@ref) | $\bm{E} \wedge n_\infty$ | $=0$ | $=0$ |
+| [`FlatBlade`](@ref) | $\mathtt{T}_{\bm{p}}[n_0 \wedge \bm{E} \wedge n_\infty]$ | $=0$ | $\ne0$ |
+| [`DualFlatBlade`](@ref) | $\mathtt{T}_{\bm{p}}[\bm{E}]$ | $\ne0$ | $=0$ |
+| [`RoundBlade`](@ref) | $\mathtt{T}_{\bm{p}}[(n_0 \pm \textstyle{\frac 12} r^2 n_\infty) \wedge \bm{E}]$ | $\ne0$ | $\ne0$ |
+| [`TangentBlade`](@ref) | $\mathtt{T}_{\bm{p}}[n_0 \wedge \bm{E}]$ | $\ne0$ | $\ne0$ |
+
+Here, $\bm{E}$ is any blade in the base space, $\mathtt{T}_{\bm{p}}$ is the operator which [`translate`](@ref)s by the base space vector $\bm{p}$ and $r$ is a scalar radius parameter.
+
+The [`standardform`](@ref) method converts any blade in `CGA{Sig}` to one of these representations.
+```@repl cga
+standardform(v12 + 2v1∧noo)
+```
+This example shows how $𝐯_1𝐯_2 + 2𝐯_2∧n_∞$ can be written as $𝚃_{2𝐯_2}[𝐯_1𝐯_2]$.
+
+## Geometric objects represented by CGA blades
+
+Any CGA blade $X$ can be associated with a subset of the base space $\mathbb{R}^n$ in two ways related by duality.[^2]
+
+[^2]:
+	They are dual in the sense that $\operatorname{ipns}(X) = \operatorname{opns}(I X)$ and $\operatorname{opns}(X) = \operatorname{ipns}(I X)$ where $I$ is the pseudoscalar.
+Define the _inner_ and _outer product null spaces_, obtained with [`ipns`](@ref) and [`opns`](@ref):
+
+```math
+\begin{align*}
+\operatorname{ipns}(X) &\coloneqq \{p \in \mathbb{R}^n \cup \{∞\} \mid \operatorname{up}(p) \mathop\rfloor X = 0 \} \\
+\operatorname{opns}(X) &\coloneqq \{p \in \mathbb{R}^n \cup \{∞\} \mid \operatorname{up}(p) \wedge X = 0 \}
+\end{align*}
+```
+
+Possible values of $\operatorname{ipns}$ or $\operatorname{opns}$ are the following subsets of the extended base space $\mathbb{R}^n \cup \{∞\}$:
+- the empty set,
+- an affine $k$-plane (point, line, plane, and so on) which contains $∞$,
+- a $k$-sphere (point, point pair, circle, sphere, and so on),
+- the point at infinity.
+
+Geometric objects of these kinds are represented by the [`FlatGeometry`](@ref) and [`RoundGeometry`](@ref) subtypes of [`CGAGeometry`](@ref).
+
+
+| `CGABlade` Subtype | $\operatorname{ipns}$ | $\operatorname{opns}$ |
+|--------------------|:----------------------|:----------------------|
+| [`DirectionBlade`](@ref) | [`PointAtInfinity`](@ref) | [`PointAtInfinity`](@ref) |
+| [`FlatBlade`](@ref) | [`EmptySet`](@ref) | [`FlatGeometry`](@ref) |
+| [`DualFlatBlade`](@ref) | [`FlatGeometry`](@ref) | [`EmptySet`](@ref) |
+| [`RoundBlade`](@ref) | [`RoundGeometry`](@ref) | [`RoundGeometry`](@ref) |
+
+
+For example, below we find that $\operatorname{opns}$ of the outer product of three conformal points is a circle with a centre, direction and real radius.
+```@repl cga
+p, q, r = up.(randn(Multivector{3,1}, 3));
+opns(p∧q∧r)
+```
