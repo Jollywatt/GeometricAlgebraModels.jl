@@ -39,17 +39,17 @@ encode(X::PointPair) = Rig("Point Pair",
 	location=X.p,
 	"Direction"=>X.E,
 	"Radius"=>√abs(X.r2),
-	"Show bar"=>true,
+	"Bar"=>true,
 	"Thickness"=>0.01,
-	"Dashed"=>X.r2 < 0,
+	"Dash"=>X.r2 < 0,
 )
 
 encode(X::Circle) = Rig("Circle",
 	location=X.p,
 	"Radius"=>√abs(X.r2),
 	"Normal"=>rdual(X.E),
-	"Dashed"=>X.r2 < 0,
-	"Dash ratio"=>0.5,
+	"Dash"=>X.r2 < 0,
+	"Dash Ratio"=>0.5,
 )
 
 encode(X::Line) = Rig("Line",
