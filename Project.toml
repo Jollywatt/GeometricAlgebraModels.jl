@@ -12,12 +12,15 @@ StyledStrings = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
 
 [weakdeps]
 Geomviz = "b876c574-87dc-4bec-8a9b-542e2b22a39c"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 
 [extensions]
 GeomvizExt = "Geomviz"
+MakieExt = "Makie"
 
 [compat]
 GeometricAlgebra = "0.2.4"
+Geomviz = "^0.1.2"
 LinearAlgebra = "1.12.0"
 StaticArrays = "1.9.15"
 StyledStrings = "1.11.0"

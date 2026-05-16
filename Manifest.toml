@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "f126593b1a28e8e189c74d5841ae4a84536eebee"
+project_hash = "b303865e1840b5a66ae684a175000a2772685eb4"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -54,7 +54,7 @@ version = "1.11.0"
 
 [[deps.GeometricAlgebra]]
 deps = ["Combinatorics", "Compat", "OrderedCollections", "PrettyTables", "Random", "SparseArrays", "StaticArrays", "StyledStrings"]
-git-tree-sha1 = "bbe052c2602c9285072e7d0c451263ce5464b4d7"
+git-tree-sha1 = "93c96434745b80ceebd0700204439eba09bdd1ac"
 repo-rev = "v0.2.4"
 repo-url = "https://github.com/Jollywatt/GeometricAlgebra.jl.git"
 uuid = "11bbe1ca-eae6-48c2-942c-9f17e43de0f0"
@@ -118,9 +118,9 @@ version = "1.8.1"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
-git-tree-sha1 = "07a921781cab75691315adc645096ed5e370cb77"
+git-tree-sha1 = "edbeefc7a4889f528644251bdb5fc9ab5348bc2c"
 uuid = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
-version = "1.3.3"
+version = "1.3.4"
 
 [[deps.Preferences]]
 deps = ["TOML"]
