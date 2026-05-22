@@ -260,7 +260,10 @@ end
 Put the blade `X` in standard form, returning a `CGABlade` object.
 """
 function standardform(X::AbstractMultivector{CGA{Sig}}; atol=sqrt(eps(float(eltype(X))))) where Sig
-	@assert isblade(X)
+	if !isblade(X)
+	  @info "Square is not scalar." X^2 atol
+		throw(ArgumentError("Input is not a blade"))
+	end
 
 	o = origin(signature(X))
 	oo = infinity(signature(X))

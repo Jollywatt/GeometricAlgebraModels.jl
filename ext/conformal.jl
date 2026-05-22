@@ -21,7 +21,7 @@ encode(::Union{EmptySet,PointAtInfinity}) = Rig("Empty")
 encode(X::FlatBlade) = encode(opns(X))
 encode(X::DualFlatBlade) = encode(ipns(X))
 function encode(X::RoundBlade)
-	if abs(X.r2) < 1e-5
+	if abs(X.r2) < 1e-8
 		encode(TangentBlade(X.E, X.p))
 	else
 		encode(X.r2 > 0 ? opns(X) : ipns(X))
@@ -55,12 +55,16 @@ encode(X::Circle) = Rig("Circle",
 encode(X::Line) = Rig("Line",
 	location=X.p,
 	"Direction"=>X.E,
+	"Length"=>1e3,
 )
 
-encode(X::TangentPlane) = Rig("Spear Disk",
+encode(X::TangentPlane) = Rig("Circle",
 	location=X.p,
 	"Radius"=>√abs(X.E⊙X.E),
 	"Normal"=>rdual(X.E),
+	"Disk"=>true,
+	"Rim"=>false,
+	"Arrows"=>true,
 )
 
 encode(X::Sphere) = Rig("Sphere",

@@ -7,9 +7,10 @@ encode(a::Multivector{3,1}) = Rig(
 )
 
 encode(a::Multivector{3,2}) = Rig(
-	"Spear Disk",
+	"Circle",
 	location=(0,0,0),
 	"Normal"=>Vector(rdual(a).comps),
 	"Radius"=>sqrt(sqrt(abs(a⊙a))),
+	"Disk"=>true,
+	"Rim"=>false,
 )
-
