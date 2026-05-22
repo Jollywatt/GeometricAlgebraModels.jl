@@ -24,7 +24,10 @@ makedocs(
     pages = Any[
     	"index.md",
     	"Models" => ["cga.md"],
-    	"blender.md",
+    	"Visualisation with Blender" => [
+       "blender.md",
+       "demos.md",
+      ],
     	"docstrings.md",
 		],
 )

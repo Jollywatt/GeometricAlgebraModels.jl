@@ -1,11 +1,11 @@
-# Visualisation with Blender
+# `Geomviz` Tutorial
 
 The [`Geomviz`](https://github.com/jollywatt/geomviz) plugin for [`Blender`](https://www.blender.org/) may be used visualise, animate and render geometric objects created with `GeometricAlgebraModels.jl`.
 
 `GeometricAlgebraModels.jl` includes a package extension which loads when the `Geomviz.jl` client is loaded.
 The Julia client talks to the `Geomviz` Blender plugin and, and the package extension defines how geometric objects are transformed into "rigs" which get displayed in Blender.
 
-## A simple example scene
+## Using `Geomviz`
 
 Let's create a few random object in CGA:
 ```@example
