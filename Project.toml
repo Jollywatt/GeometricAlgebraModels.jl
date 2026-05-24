@@ -1,6 +1,6 @@
 name = "GeometricAlgebraModels"
 uuid = "8409be77-1e4d-4950-82ec-d95e11b31402"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["jollywatt <jo.alex.w@gmail.com>"]
 
 [deps]
