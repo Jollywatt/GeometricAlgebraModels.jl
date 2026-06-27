@@ -19,8 +19,8 @@ encode(a::Mesh) = Rig("Mesh",
 	vertices=a.vertices,
 	edges=[e .- 1 for e in a.edges],
 	faces=[f .- 1 for f in a.faces],
-	"Show points"=>isempty(a.edges),
-	"Show edges"=>isempty(a.faces),
+	"Shade Smooth"=>true,
+	"Show Edges"=>true,
 )
 
 end

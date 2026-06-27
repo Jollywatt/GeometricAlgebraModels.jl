@@ -147,6 +147,15 @@ struct Mesh{N,T}
 	faces::Vector{Union{NTuple{3,Int},NTuple{4,Int}}}
 end
 
+Base.show(io::IO, m::Mesh) = (summary(io, m); print(io, "(…)"))
+
+function Base.show(io::IO, ::MIME"text/plain", m::Mesh)
+  summary(io, m)
+  println(io, " with:")
+  println(io, " $(length(m.vertices)) vertices")
+  println(io, " $(length(m.edges)) edges")
+  println(io, " $(length(m.faces)) faces")
+end
 
 Mesh(verts::AbstractArray{<:Multivector{Sig,1}}; kwargs...) where Sig = Mesh([Tuple(v.comps) for v in verts]; kwargs...)
 
@@ -158,7 +167,6 @@ function Mesh(verts::AbstractArray{T,N};
 	faces = Union{NTuple{3,Int},NTuple{4,Int}}[]
 	ids = reshape(eachindex(verts), size(verts))
 	kids = CartesianIndices(ids)
-	@show ids
 	ci(i) = CartesianIndex(ntuple(==(i), N))
 
 	if isnothing(edgedims)
