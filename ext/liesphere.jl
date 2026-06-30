@@ -1,4 +1,5 @@
 using GeometricAlgebraModels.LieSphereGeometry
+using GeometricAlgebraModels.LorentzianAlgebra
 
 encode(A::OrientedPlane) = Rig("Plane", "Normal"=>A.n, location=A.n*A.d)
 function encode(A::OrientedSphere)
@@ -7,4 +8,9 @@ function encode(A::OrientedSphere)
   else
     Rig("Point", location=A.p)
   end
+end
+
+function encode(A::TangentBlade{Lorentzian{3}, 0})
+  p, r = spacetimesplit(A.p)
+  encode(OrientedSphere(p, r))
 end

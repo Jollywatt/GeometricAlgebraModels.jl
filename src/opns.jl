@@ -130,7 +130,7 @@ end
 
 function opnsmesh(X::AbstractMultivector, n=32; maxobjects=2^9)
 	# first, find the diagonal quadratic form to solve
-	A = stack(x.comps for x in factorblade(X))
+	A = stack(Multivector(x).comps for x in factorblade(X))
 	η = Diagonal(collect(canonical_signature(signature(X))))
 	B = Symmetric(A'*η*A)
 	λ, U = eigen(B, sortby=identity)
