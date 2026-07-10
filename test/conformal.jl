@@ -1,4 +1,5 @@
 using GeometricAlgebraModels.Conformal
+using GeometricAlgebraModels.Spacetime
 
 @testset "conformal standard forms" begin
 
@@ -40,7 +41,7 @@ end
 
 	@testset for dim in 0:4
 		n0, noo = Conformal.nullbasis(dim)
-		v0 = LorentzianAlgebra.timevector(dim)
+		v0 = Spacetime.timevector(dim)
 
 		@testset for k in 1:dim - 1
 			for _ in 1:10

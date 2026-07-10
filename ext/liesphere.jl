@@ -1,5 +1,5 @@
 using GeometricAlgebraModels.LieSphereGeometry
-using GeometricAlgebraModels.LorentzianAlgebra
+using GeometricAlgebraModels.Spacetime
 
 encode(A::OrientedPlane) = Rig("Plane", "Normal"=>A.n, location=A.n*A.d)
 function encode(A::OrientedSphere)

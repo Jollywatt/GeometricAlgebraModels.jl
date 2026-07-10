@@ -5,7 +5,7 @@ import GeometricAlgebra: signature_convert, signature_promote_rule, canonical_si
 
 
 using ..GeometricAlgebraModels.Conformal
-using ..GeometricAlgebraModels.LorentzianAlgebra
+using ..GeometricAlgebraModels.Spacetime
 
 using GeometricAlgebraModels: opnsmesh
 
@@ -72,7 +72,7 @@ function liesphere(x::AbstractMultivector{LSG{Sig}}) where Sig
 	a = x⊙-oo
 	if abs(a) < 1e-10
 		# oriented plane
-		n = LorentzianAlgebra.unembed(Conformal.unembed(x))
+		n = Spacetime.unembed(Conformal.unembed(x))
 		norm = √(n⊙n)
 		n /= norm
 		x /= norm
@@ -81,7 +81,7 @@ function liesphere(x::AbstractMultivector{LSG{Sig}}) where Sig
 	else
 		x /= a
 		# oriented sphere
-		p, r = LorentzianAlgebra.spacetimesplit(Conformal.unembed(x))
+		p, r = Spacetime.spacetimesplit(Conformal.unembed(x))
 		OrientedSphere(p, r)
 
 	end

@@ -1,6 +1,6 @@
-using GeometricAlgebraModels.LorentzianAlgebra
+using GeometricAlgebraModels.Spacetime
 
-@testset "lorentzian standard forms" begin
+@testset "Spacetime standard forms" begin
 	v0 = timevector()
 
 	@testset for n in 0:4, k in 1:n
@@ -16,7 +16,5 @@ using GeometricAlgebraModels.LorentzianAlgebra
 		@test Multivector(standardform(spacelike)) ≈ spacelike
 		@test Multivector(standardform(lightlike)) ≈ lightlike
 		@test Multivector(standardform(timelike)) ≈ timelike
-
-
 	end
 end

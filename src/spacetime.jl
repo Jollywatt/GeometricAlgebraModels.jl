@@ -1,4 +1,4 @@
-module LorentzianAlgebra
+module Spacetime
 
 using StyledStrings
 
@@ -9,7 +9,7 @@ using ..GeometricAlgebraModels: showfields, StandardFormMultivector
 import ..GeometricAlgebraModels: standardform, showformula
 
 export Lorentzian
-export LorentzianBlade, SpacelikeBlade, LightlikeBlade, TimelikeBlade
+export SpacetimeBlade, SpacelikeBlade, LightlikeBlade, TimelikeBlade
 export timevector, boost, refl, spacetimesplit
 
 
@@ -55,7 +55,7 @@ spacetimesplit(a::Multivector{Lorentzian{Sig},1}) where Sig = (unembed(a), a.com
 # standard blades
 
 """
-	LorentzianBlade{Sig,K} >:
+	SpacetimeBlade{Sig,K} >:
 		SpacelikeBlade{Sig,K}
 		LightlikeBlade{Sig,K}
 		TimelikeBlade{Sig,K}
@@ -69,19 +69,19 @@ A `K`-blade in a Lorenzian space `Lorentzian{Sig}`, expressed in terms only of a
 | `LightlikeBlade(E, u)` | ``E ∧ (u + v₀)`` |
 | `TimelikeBlade(E)` | ``𝙱(β, E ∧ v₀)`` |
 
-Any blade in `Lorentzian{Sig}` is of one fo 
+Any blade in `Lorentzian{Sig}` is of one fo
 """
-abstract type LorentzianBlade{Sig,K} <: StandardFormMultivector{Sig,K} end
-struct SpacelikeBlade{Sig,K} <: LorentzianBlade{Sig,K}
+abstract type SpacetimeBlade{Sig,K} <: StandardFormMultivector{Sig,K} end
+struct SpacelikeBlade{Sig,K} <: SpacetimeBlade{Sig,K}
 	E::Multivector{Sig,K}
 	ζ::Multivector{Sig,1}
 end
-struct LightlikeBlade{Sig,K,G} <: LorentzianBlade{Sig,K}
+struct LightlikeBlade{Sig,K,G} <: SpacetimeBlade{Sig,K}
 	E::Multivector{Sig,G}
 	n::Multivector{Sig,1}
 	LightlikeBlade(E::Multivector{Sig,G}, n::Multivector{Sig,1}) where {Sig,G} = new{Sig,G + 1,G}(E, n)
 end
-struct TimelikeBlade{Sig,K,G} <: LorentzianBlade{Sig,K}
+struct TimelikeBlade{Sig,K,G} <: SpacetimeBlade{Sig,K}
 	E::Multivector{Sig,G}
 	ζ::Multivector{Sig,1}
 	TimelikeBlade(E::Multivector{Sig,G}, ζ) where {Sig,G} = new{Sig,G + 1,G}(E, ζ)
