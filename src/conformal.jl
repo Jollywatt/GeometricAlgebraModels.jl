@@ -114,12 +114,12 @@ nullbasis, origin, infinity
 unembed(x::AbstractMultivector{CGA{Sig}}) where {Sig} = GeometricAlgebra.embed(Sig, x)
 
 function up(x::Multivector{Sig,1}) where Sig
-	o, oo = nullbasis(CGA{Sig})
+	o, oo = nullbasis(Sig)
 	o + x + 2\(x⊙x)*oo
 end
 up(x::BasisBlade) = up(Multivector(x))
 up(comps::Union{Tuple,AbstractVector}) = up(Multivector{length(comps),1}(comps))
-up(a, bc...) = up((a, bc...))
+up(a, b, c...) = up((a, b, c...))
 
 function dn(x::Multivector{CGA{Sig},1}) where Sig
 	oo = infinity(CGA{Sig})
@@ -130,18 +130,46 @@ end
 	up(::Multivector{Sig,1}) -> Multivector{CGA{Sig},1}
 	dn(::Multivector{CGA{Sig},1}) -> Multivector{Sig,1}
 
-Conformal embedding of a point.
-
-Lift "up" a 1-vector in the base space `Sig` to a null vector in the conformal algebra `CGA{Sig}`,
-or project "down" a conformal 1-vector back into the base space.
-
-The `up` map is given by
+Conformal (un)embeddings of a point, given by
 ```math
-up(x) = n0 + embed(x) + 1/2 x^2 noo
+up(x) = no + x + 1/2 x^2 ni
 ```
-where `n0, noo = nullbasis(CGA{Sig})` are the points representing the origin and infinity.
+and its inverse
+```math
+dn(x) = x/(-ni⋅x)
+```
+where `no, ni = nullbasis(Sig)` are the basis vectors representing the origin and infinity.
 
-For any vector `u` we have `dn(up(u)) == n` and `up∘dn` is idempotent.
+If `x` is a vector in a base space with signature `Sig`, then `up(x)`
+lives in the _conformalised_ space with signature `CGA{Sig}`, unless
+the base space is already of the form `CGA{Sig}`.
+
+The composition `dn∘up` is the identity while `up∘dn` is an idempotent
+normalisation operation.
+
+!!! warning
+    If `x::Multivector{CGA{Sig},1}`, then no checks are performed
+    to ensure that `x == embed(Sig, x)`.
+
+# Examples
+```jldoctest
+julia> @basis 3 # algebra for Euclidean base space
+[ Info: Defined basis blades v1, v2, v3, v12, v13, v23, v123, I in Main
+
+julia> up(v1 + 2v2 + 3v3) # maps from 3 to CGA{3}
+5-component Multivector{CGA{3}, 1, SVector{5, Float64}}:
+ 1.0 v1
+ 2.0 v2
+ 3.0 v3
+ 6.5 vp
+ 7.5 vm
+
+julia> dn(ans) # maps from CGA{3} to 3
+3-component Multivector{3, 1, SVector{3, Float64}}:
+ 1.0 v1
+ 2.0 v2
+ 3.0 v3
+```
 """
 up, dn
 
