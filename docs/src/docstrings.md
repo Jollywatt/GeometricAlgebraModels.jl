@@ -4,8 +4,14 @@
 Modules = [GeometricAlgebraModels]
 ```
 
-## Conformal
+## Conformal module
 
 ```@autodocs
 Modules = [GeometricAlgebraModels.Conformal]
+```
+
+## Spacetime module
+
+```@autodocs
+Modules = [GeometricAlgebraModels.Spacetime]
 ```

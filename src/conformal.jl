@@ -153,6 +153,8 @@ normalisation operation.
 
 # Examples
 ```jldoctest
+julia> using GeometricAlgebraModels.Conformal
+
 julia> @basis 3 # algebra for Euclidean base space
 [ Info: Defined basis blades v1, v2, v3, v12, v13, v23, v123, I in Main
 
